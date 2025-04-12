@@ -6,8 +6,6 @@ const Login = () => {
     //Navegation
     const auth = getAuth();
     const navigate = useNavigate();
-    
-   
     const [authing, setAuthing] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
