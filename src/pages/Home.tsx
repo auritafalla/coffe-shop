@@ -2,7 +2,7 @@ import CoffeeSlider from "../components/CoffeeSlider";
 import PromoBanner from "../components/PromoBanner";
 import Testimonials from "../components/Testimonials";
 import Newsletter from "../components/Newsletter";
-import Footer from "../components/Footer";
+
 
 export default function Home() {
   return (
@@ -38,7 +38,7 @@ export default function Home() {
 
       {/* Newsletter + Footer */}
       <Newsletter />
-    
+      
     </>
   );
 }
