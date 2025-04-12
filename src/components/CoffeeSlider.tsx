@@ -1,9 +1,11 @@
 import { useKeenSlider } from "keen-slider/react";
-
-import { coffees } from "../data/coffee";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../features/cartSlice"; // Acción de Redux para agregar al carrito
+import { coffees, Coffee } from "../data/coffee"; // Asegúrate de que el tipo Coffee esté importado correctamente
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export default function CoffeeSlider() {
+  const dispatch = useDispatch(); // Usamos useDispatch para acceder al dispatch de Redux
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
     loop: true,
     slides: {
@@ -22,6 +24,10 @@ export default function CoffeeSlider() {
       },
     },
   });
+
+  const handleAddToCart = (coffee: Coffee) => {
+    dispatch(addToCart(coffee)); // Disparamos la acción para agregar el café al carrito
+  };
 
   return (
     <section className="bg-[#f9f6f2] py-10 px-4 relative">
@@ -52,7 +58,10 @@ export default function CoffeeSlider() {
               <p className="text-sm text-gray-600 mb-2">{coffee.description}</p>
               <div className="flex justify-between items-center">
                 <span className="text-md font-semibold">Rs. {coffee.price}</span>
-                <button className="bg-black text-white text-xs px-3 py-1 rounded hover:bg-gray-800">
+                <button
+                  onClick={() => handleAddToCart(coffee)} // Usamos la nueva función que usa Redux
+                  className="bg-black text-white text-xs px-3 py-1 rounded hover:bg-gray-800"
+                >
                   Order Now
                 </button>
               </div>

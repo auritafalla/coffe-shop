@@ -1,32 +1,83 @@
-import { Link } from "react-router-dom";
-import { Search } from "lucide-react";
+import React, { useState, useEffect} from "react";
+import { NavLink } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 
-export default function Navbar() {
+const Navbar: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  const toggleMenu = () => setIsOpen(!isOpen);
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+  
+    window.addEventListener("scroll", handleScroll);
+  
+    // ✅ Limpieza del listener al desmontar el componente
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const navItems = [
+    { name: "Home", path: "/" },
+    { name: "Shop", path: "/shop" },
+    { name: "About", path: "/about" },
+    { name: "Login", path: "/login" },
+  ];
 
   return (
-    
-    <header className="absolute top-0 left-0 w-full z-10">
-      <nav className="flex justify-between items-center px-8 py-6 text-white bg-black/40 backdrop-blur-sm">
-        {/* Logo */}
-        <Link to="/" className="text-2xl font-bold tracking-wide">
-          COFFEE
-        </Link>
-      
-          
-        {/* Navigation Links */}
-        <ul className="hidden md:flex gap-6 text-sm uppercase font-medium">
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/coffee">Coffee</Link></li>
-          <li><Link to="/shop">Shop</Link></li>
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/Login">Login</Link></li>
+    <nav
+      className={`sticky top-0 py-4 z-50 transition-all duration-300 ${
+        scrolled ? "bg-white shadow-md backdrop-blur-md" : "bg-transparent" }`}>
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <div className="text-2xl font-bold text-brown-800">CoffeeShop</div>
+        <div className="md:hidden">
+          <button onClick={toggleMenu}>
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+        <ul className="hidden md:flex space-x-6 text-brown-900 font-medium">
+          {navItems.map(({ name, path }) => (
+            <li key={name}>
+              <NavLink
+                to={path}
+                className={({ isActive }) =>
+                  `hover:text-brown-600 transition ${
+                    isActive ? "text-brown-600 font-semibold" : ""
+                  }`
+                }
+              >
+                {name}
+              </NavLink>
+            </li>
+          ))}
         </ul>
-
-        {/* Search Icon */}
-        <button>
-          <Search size={20} />
-        </button>
-      </nav>
-    </header>
+      </div>
+      {/* Mobile menu */}
+      {isOpen && (
+        <ul className="md:hidden mt-4 space-y-3 text-brown-900 font-medium">
+          {navItems.map(({ name, path }) => (
+            <li key={name}>
+              <NavLink
+                to={path}
+                onClick={() => setIsOpen(false)}
+                className={({ isActive }) =>
+                  `block hover:text-brown-600 transition ${
+                    isActive ? "text-brown-600 font-semibold" : ""
+                  }`
+                }
+              >
+                {name}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      )}
+    </nav>
   );
-}
+};
+
+export default Navbar;

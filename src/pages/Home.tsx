@@ -38,7 +38,7 @@ export default function Home() {
 
       {/* Newsletter + Footer */}
       <Newsletter />
-      <Footer />
+    
     </>
   );
 }
